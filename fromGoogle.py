@@ -50,8 +50,8 @@ LEARNING_RATE = 2e-5
 HP_DROPOUT_MIN = 0.1
 HP_DROPOUT_MAX = 0.5 # zwiekszyc do 0.5
 # HP_BATCH_SIZE = [16, 32, 64, 128, 256] # nie szukac
-HP_LEARNING_RATE_MIN = 2e-5 # Po przedziałach 
-HP_LEARNING_RATE_MAX = 0.1 # Po przedziałach 
+HP_LEARNING_RATE_MIN = 2e-5 # Po przedziałach
+HP_LEARNING_RATE_MAX = 0.1 # Po przedziałach
 
 # dodać weight decay
 
@@ -63,7 +63,7 @@ INPUT_TEXT = 'Your sample TED Talk description goes here. Technologi IT Computer
 # The program
 writer = SummaryWriter('./model_logs', )
 
-# This is a custom dataset class that helps organize movie reviews and their sentiments for our BERT model. 
+# This is a custom dataset class that helps organize movie reviews and their sentiments for our BERT model.
 # It takes care of tokenizing the text, handling the sequence length, and providing a neat package with input IDs, attention masks, and labels for our model to learn from.
 class TextClassificationDataset(Dataset):
     def __init__(self, texts, labels, tokenizer, max_length):
@@ -79,8 +79,8 @@ class TextClassificationDataset(Dataset):
         encoding = self.tokenizer(text, return_tensors='pt', max_length=self.max_length, padding='max_length', truncation=True)
         return {'input_ids': encoding['input_ids'].flatten(), 'attention_mask': encoding['attention_mask'].flatten(), 'label': torch.tensor(label, dtype=torch.long)}
 
-# Our BERTClassifier takes in some input IDs and attention masks, and runs them through BERT and the extra layers we added. 
-# The classifier returns our output as class scores. 
+# Our BERTClassifier takes in some input IDs and attention masks, and runs them through BERT and the extra layers we added.
+# The classifier returns our output as class scores.
 class BERTClassifier(nn.Module):
     def __init__(self, bert_model_name, num_classes, dropout):
         super(BERTClassifier, self).__init__()
@@ -94,7 +94,7 @@ class BERTClassifier(nn.Module):
             x = self.dropout(pooled_output)
             logits = self.fc(x)
             return logits
-    
+
 # Main
 if __name__ == '__main__':
     def load_data(data_file):
@@ -192,7 +192,7 @@ if __name__ == '__main__':
         writer.add_scalar('Experiment/learning_rate', learning_rate)
         writer.add_scalar('Experiment/validation_loss', validation_loss)
         return validation_loss  # Return the validation loss for optimization
-    
+
     def objective(trial):
         train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
         val_loader = DataLoader(val_dataset, batch_size=16, shuffle=False)  # Fixed batch size for validation
@@ -205,7 +205,7 @@ if __name__ == '__main__':
 
         # Close the TensorBoard SummaryWriter
         writer2.close()
-        
+
         return validation_loss
 
     # Set up parameters
@@ -228,7 +228,7 @@ if __name__ == '__main__':
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
 
-    # Initialize or Load Model and device 
+    # Initialize or Load Model and device
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     #Init:
@@ -251,7 +251,7 @@ if __name__ == '__main__':
     # Move dummy input to GPU
     dummy_input_ids = dummy_input_ids.to('cuda:0')
     dummy_attention_mask = dummy_attention_mask.to('cuda:0')
-    
+
     # Write out model graph
     writer.add_graph(model, (dummy_input_ids, dummy_attention_mask))
     writer.close()
